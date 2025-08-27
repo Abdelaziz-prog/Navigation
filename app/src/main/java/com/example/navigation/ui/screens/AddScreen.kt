@@ -10,21 +10,30 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.navigation.data.UserDataBase
+import com.example.navigation.data.UserEntity
 import com.example.navigation.hellper.tryToConvertToInt
 import com.example.navigation.navigation.Screens
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun AddNewUserScreen(navController: NavController) {
     var name by rememberSaveable { mutableStateOf("") }
     var age by rememberSaveable { mutableStateOf("") }
-
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val db = remember { UserDataBase.getDataBase(context) }
+    val userDao = db.userDao()
     Column(
         modifier = Modifier
             .fillMaxSize(), verticalArrangement = Arrangement.Center,
@@ -41,12 +50,18 @@ fun AddNewUserScreen(navController: NavController) {
             value = age,
             onValueChange = { age = it }, modifier = Modifier.padding(bottom = 50.dp),
             placeholder = { Text(text = "Enter your age") }
-
         )
-        Button(onClick = { navController.navigate(Screens.Details(
-            age = age.tryToConvertToInt(),
-            name = name
-        )) }) {
+        Button(onClick = {
+            scope.launch {
+                val newUser = UserEntity(
+                    name = name,
+                    age = age.tryToConvertToInt()
+                )
+                userDao.addUser(newUser)
+
+                navController.navigateUp()
+            }
+        }) {
             Text(text = "click me ")
         }
     }

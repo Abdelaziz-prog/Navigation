@@ -20,7 +20,7 @@ fun ManNavHost(
         startDestination = Screens.Home
     ) {
         composable<Screens.Home> {
-            HomeScreen(navController = navController)
+            HomeScreen(navController= navController )
         }
 
         composable<Screens.AddUser> {
@@ -39,5 +39,4 @@ fun ManNavHost(
         }
     }
 }
-
 
