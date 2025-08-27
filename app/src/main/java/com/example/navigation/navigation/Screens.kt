@@ -12,5 +12,5 @@ sealed class Screens {
     object AddUser : Screens()
 
     @Serializable
-    data class Details(val name: String, val age: Int) : Screens()
+    data class Details(val id: Int) : Screens()
 }

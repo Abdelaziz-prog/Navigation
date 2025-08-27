@@ -30,11 +30,10 @@ fun ManNavHost(
 
         composable<Screens.Details> { backStackEntry ->
             val args = backStackEntry.toRoute<Screens.Details>()
-            val name: String = args.name
-            val age: Int = args.age
+            val id: Int = args.id
+
             SecondScreen(
-                name = name,
-                age = age
+                id = id
             )
         }
     }
