@@ -33,7 +33,8 @@ fun ManNavHost(
             val id: Int = args.id
 
             SecondScreen(
-                id = id
+                id= id,
+               navController=navController
             )
         }
     }
